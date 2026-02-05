@@ -61,10 +61,16 @@ app = FastAPI(lifespan=lifespan)
 
 @app.post("/")
 def root():
+    # Headers to disable proxy/CDN buffering (CloudFront, nginx, etc.)
     return StreamingResponse(
         "This agent is meant to be used with CopilotKit.\n"
         "You can follow this documentation to use it: "
-        "https://docs.blaxel.ai/Agents/Integrate-in-apps/CopilotKit#copilotkit-integration"
+        "https://docs.blaxel.ai/Agents/Integrate-in-apps/CopilotKit#copilotkit-integration",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        },
     )
 
 
